@@ -18,7 +18,7 @@ const typography = {
     fontFamily: 'Georama',
     fontSize: '16px',
     fontStyle: 'normal',
-    fontWeight: 700,
+    fontWeight: 500,
     lineHeight: '140%',
   },
   h4: {},
