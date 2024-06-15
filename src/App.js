@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { fetchUsers } from './api/apiService';
 import Login from './components/Login/Login';
 import HomePage from './pages/HomePage';
+import RouterConfig from './RouterConfig';
 
 
 function App() {
@@ -13,7 +14,8 @@ function App() {
   return (
     <div>
       {/* <Login /> */}
-      <HomePage/>
+      {/* <HomePage/> */}
+      <RouterConfig/>
     </div>
   );
 }
