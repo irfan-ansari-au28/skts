@@ -1,42 +1,28 @@
-import { Grid, Paper } from '@mui/material';
+import { Box, Grid, Paper, Typography } from '@mui/material';
 import React from 'react';
+import PaperLayout from '../PaperLayout/PaperLayout';
+import EntitySelect from '../EntitySelect/EntitySelect';
 
 const Search = () => {
+  const handleEntitySelect = (entityId) => {
+    // Call the API to get form fields for the selected entity
+    console.log(entityId, 'call api to fetch fields')
+  };
   return (
     <>
-      <div>Search</div>
+      <Box sx={{ pb: 3 }}>
+        <Typography variant="h1" component="h1" color={'#4A4A4A'}>
+          Document Search
+        </Typography>
+      </Box>
       <Grid container spacing={3}>
-        {/* Chart */}
-        <Grid item xs={12} md={8} lg={9}>
-          <Paper
-            sx={{
-              p: 2,
-              display: 'flex',
-              flexDirection: 'column',
-              height: 240,
-            }}
-          >
-            {/* <Chart /> */}
-          </Paper>
-        </Grid>
-        {/* Recent Deposits */}
-        <Grid item xs={12} md={4} lg={3}>
-          <Paper
-            sx={{
-              p: 2,
-              display: 'flex',
-              flexDirection: 'column',
-              height: 240,
-            }}
-          >
-            {/* <Deposits /> */}
-          </Paper>
-        </Grid>
-        {/* Recent Orders */}
-        <Grid item xs={12}>
-          <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-            {/* <Orders /> */}
-          </Paper>
+        <Grid item xs={12} md={8} lg={12}>
+          <PaperLayout>
+          <Typography variant="body1" component="p" >
+          Document Type
+        </Typography>
+            <EntitySelect onEntitySelect={handleEntitySelect} />
+          </PaperLayout>
         </Grid>
       </Grid>
     </>
