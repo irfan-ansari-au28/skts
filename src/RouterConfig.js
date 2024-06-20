@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { Routes, Route, BrowserRouter as Router } from 'react-router-dom';
-import HomePage from '../src/pages/HomePage/index'
+import HomePage from '../src/pages/HomePage/index';
+import Login from './components/Login/Login';
 
 // Lazy loaded components
 // const HomePage = lazy(() => import('../src/pages/HomePage/index'));
@@ -11,6 +12,7 @@ const RouterConfig = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>
+        <Route path="/login" element={<Login />} />
         {/* Base path for the dashboard */}
         <Route path="/" element={<HomePage />}>
           {/* Nested routes under dashboard */}
@@ -18,9 +20,9 @@ const RouterConfig = () => {
           {/* Shows default content for "/dashboard" */}
           <Route path="search" element={<Search />} />
           <Route path="download" element={<Download />} />
-          <Route path="*" element={<div>Page Not Found</div>} />{' '}
           {/* Fallback for unmatched routes under "/" */}
         </Route>
+        <Route path="*" element={<div>Page Not Found</div>} />{' '}
       </Routes>
     </Suspense>
   );

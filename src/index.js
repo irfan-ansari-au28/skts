@@ -6,13 +6,17 @@ import reportWebVitals from './reportWebVitals';
 import { ThemeProvider } from '@mui/material/styles';
 import themes from '../src/themes/index';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from './store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <ThemeProvider theme={themes()}>
-    <Router>
-      <App />
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <App />
+      </Router>
+    </Provider>
   </ThemeProvider>
 );
 

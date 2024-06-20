@@ -26,3 +26,18 @@ export const fetchEntities = async () => {
     }
 };
 
+// Function to fetch entity fields based on entityId
+export const fetchEntityFields = async (entityId) => {
+    try {
+        const response = await API.get(`/v1/entity/fields/all/${entityId}`);
+        if (response.data.isSuccess === "success") {
+            return response.data.resultData; // Return the array of fields directly
+        } else {
+            throw new Error(response.data.errorDetails.errorMessage || "Unknown error fetching entity fields");
+        }
+    } catch (error) {
+        console.error('Failed to fetch entity fields:', error);
+        throw error;  // Rethrow to handle it in the component
+    }
+};
+

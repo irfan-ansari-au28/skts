@@ -1,21 +1,46 @@
 import './App.css';
 import { useEffect } from 'react';
-import { fetchEntities, fetchUsers } from './api/apiService';
+// import { fetchEntities, fetchEntityFields, fetchUsers } from './api/apiService';
 import Login from './components/Login/Login';
 import HomePage from './pages/HomePage';
 import RouterConfig from './RouterConfig';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchEntities } from './features/entities/entitiesSlice';
 
 
 function App() {
+
+  const dispatch = useDispatch();
+  const { entities, loading, error } = useSelector(state => state.entities);
+
+  
+
   useEffect(() => {
-    fetchUsers();
+    dispatch(fetchEntities());
+    if(entities){
+      console.log(entities,"------------------")
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    // fetchUsers();
+    // fetchEntityFields('10001')
   }, []);
 
   return (
     <div>
+        
+     
+   
       {/* <Login /> */}
       {/* <HomePage/> */}
       <RouterConfig/>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        entities?.data?.map(entity => <div key={entity.entityId}>{entity.displayName}</div>)
+      )}
+    
     </div>
   );
 }

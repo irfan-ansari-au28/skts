@@ -13,6 +13,7 @@ const themes = () =>
         lightGrey: '#4A4A4A',
         lightBlack: '#190134',
         redHover: '#FADFE3',
+        selectValue: '#555770'
       },
     },
     typography: { ...typography },

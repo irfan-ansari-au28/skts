@@ -1,12 +1,14 @@
 import React from 'react';
 import styles from './Login.module.css';
 import backgroundImage from '../../assets/images/login-bg-min.png';
-import { Button,  Box, Typography } from '@mui/material';
+import { Button, Box, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import logo from '../../assets/images/cma-logo.png';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -76,6 +78,7 @@ const Login = () => {
             variant="contained"
             color="primary"
             sx={{ mt: 3, mb: 2 }}
+            onClick={() => navigate('/')}
           >
             Sign In
           </Button>

@@ -1,0 +1,68 @@
+{
+  "isSuccess": "success",
+  "totalItems": 500,
+  "data": [
+    {
+      "displayName": "string",
+      "entityName": "string",
+      "entityId": 1,
+      "searchFields": [
+        {
+          "fieldId": 1,
+          "fieldName": "sample",
+          "displayName": "sample",
+          "minValue": 1,
+          "maxValue": 2,
+          "status": "ACTIVE",
+          "defaultValue": "",
+          "dataType": "",
+          "isMandatory": true
+        },
+        {
+          "fieldId": 2,
+          "fieldName": "sample",
+          "displayName": "sample",
+          "minValue": 1,
+          "maxValue": 2,
+          "status": "ACTIVE",
+          "defaultValue": "",
+          "dataType": "",
+          "isMandatory": true
+        }
+      ]
+    },
+    {
+      "displayName": "string",
+      "entityName": "string",
+      "entityId": 1,
+      "searchFields": [
+        {
+          "fieldId": 1,
+          "fieldName": "sample",
+          "displayName": "sample",
+          "minValue": 1,
+          "maxValue": 2,
+          "status": "ACTIVE",
+          "defaultValue": "",
+          "dataType": "",
+          "isMandatory": true
+        },
+        {
+          "fieldId": 2,
+          "fieldName": "sample",
+          "displayName": "sample",
+          "minValue": 1,
+          "maxValue": 2,
+          "status": "ACTIVE",
+          "defaultValue": "",
+          "dataType": "",
+          "isMandatory": true
+        }
+      ]
+    }
+  ],
+  "errorDetails": {
+    "errorCode": 0,
+    "errorMessage": "string"
+  }
+}

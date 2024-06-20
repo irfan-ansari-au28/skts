@@ -19,7 +19,7 @@ import ListItems from './ListItems';
 import logo from '../../assets/images/cma-logo.png';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Button } from '@mui/material';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 // import Chart from './Chart';
 // import Deposits from './Deposits';
@@ -91,6 +91,8 @@ const Drawer = styled(MuiDrawer, {
 
 export default function Dashboard() {
   const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate()
+
   const toggleDrawer = () => {
     // Only allow the drawer to toggle open if the screen width is greater than 768 pixels
     if (window.innerWidth > 768) {
@@ -152,6 +154,7 @@ export default function Dashboard() {
               }}
               variant="outlined"
               endIcon={<LogoutIcon />}
+              onClick={() => navigate('/login')}
             >
               <Typography component="h3" variant="h3">
                 Jack Neel
