@@ -6,6 +6,8 @@ import HomePage from './pages/HomePage';
 import RouterConfig from './RouterConfig';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchEntities } from './features/entities/entitiesSlice';
+import DualSelectComponent from './components/test/Test';
+import Search from './components/pages/Search';
 
 
 function App() {
@@ -35,6 +37,8 @@ function App() {
       {/* <Login /> */}
       {/* <HomePage/> */}
       <RouterConfig/>
+      <DualSelectComponent/>
+      <Search/>
       {loading ? (
         <p>Loading...</p>
       ) : (

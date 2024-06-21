@@ -8,7 +8,7 @@ const Search = () => {
   return (
     <>
       <Box sx={{ pb: 3 }}>
-        <Typography variant="h1" component="h1" color={'#4A4A4A'}>
+        <Typography variant="h2" component="h1" color={'#4A4A4A'}>
           Document Search
         </Typography>
       </Box>
