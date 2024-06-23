@@ -4,9 +4,13 @@ import API from '../../api/axios';
 // Async thunk for fetching entities
 export const fetchEntities = createAsyncThunk(
   'entities/fetchEntities',
-  async () => {
-    const response = await API.get('/v1/entity/all');
-    return response.data;
+  async (type, { rejectWithValue }) => {
+    try {
+      const response = await API.get(`/api/v1/entity/all?type=${type}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 

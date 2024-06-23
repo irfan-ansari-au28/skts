@@ -8,7 +8,7 @@ const DynamicSearchForm = () => {
   const [formData, setFormData] = React.useState({});
 
   // Extract searchFields for the selected entityId
-  const searchFields = entities.data.find(entity => entity.entityId === selectedEntityId)?.searchFields || [];
+  const searchFields = entities?.resultData?.find(entity => entity.entityId === selectedEntityId)?.searchFields || [];
 
   const handleChange = (fieldId, value) => {
     setFormData(prev => ({ ...prev, [fieldId]: value }));
@@ -41,7 +41,8 @@ const DynamicSearchForm = () => {
               variant="outlined"
               value={formData[field.fieldId] || ''}
               onChange={(e) => handleChange(field.fieldId, e.target.value)}
-              type={field.dataType === 'string' ? 'text' : 'number'}
+              // type={field.dataType === 'string' ? 'text' : 'number'}
+              type={field.dataType.toLowerCase()}
               required={field.isMandatory}
             />
           </Grid>

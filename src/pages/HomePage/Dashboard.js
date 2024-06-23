@@ -25,23 +25,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 // import Deposits from './Deposits';
 // import Orders from './Orders';
 
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+
 
 const drawerWidth = 180;
 
@@ -196,7 +180,6 @@ export default function Dashboard() {
         <Toolbar />
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
           <Outlet />
-          <Copyright sx={{ pt: 4 }} />
         </Container>
       </Box>
     </Box>

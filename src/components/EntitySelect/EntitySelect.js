@@ -1,17 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { FormControl, InputLabel, Select, MenuItem, CircularProgress } from '@mui/material';
-import { fetchEntities, setSelectedEntityId } from '../../features/entities/entitiesSlice';
+import {  setSelectedEntityId } from '../../features/entities/entitiesSlice';
 
 const EntitySelect = () => {
     const dispatch = useDispatch();
     const { entities, selectedEntityId, loading } = useSelector(state => state.entities);
 
-    // useEffect(() => {
-    //     if (entities.length === 0) {
-    //         dispatch(fetchEntities());
-    //     }
-    // }, [dispatch, entities.length]);
 
     const handleChange = (event) => {
         dispatch(setSelectedEntityId(event.target.value));
@@ -29,11 +24,11 @@ const EntitySelect = () => {
                 value={selectedEntityId || ''}
                 label="Document Type"
                 onChange={handleChange}
-                disabled={entities.length === 0}
+                disabled={entities?.resultData?.length === 0}
             >
-                {entities.data.map(entity => (
+                {entities?.resultData?.map(entity => (
                     <MenuItem key={entity.entityId} value={entity.entityId}>
-                        {entity.displayName}
+                        {entity.displayname}
                     </MenuItem>
                 ))}
             </Select>

@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchEntities } from './features/entities/entitiesSlice';
 import DualSelectComponent from './components/test/Test';
 import Search from './components/pages/Search';
+import DynamicTable from './components/DynamicTable/DynamicTable';
 
 
 function App() {
@@ -15,14 +16,6 @@ function App() {
   const dispatch = useDispatch();
   const { entities, loading, error } = useSelector(state => state.entities);
 
-  
-
-  useEffect(() => {
-    dispatch(fetchEntities());
-    if(entities){
-      console.log(entities,"------------------")
-    }
-  }, [dispatch]);
 
   useEffect(() => {
     // fetchUsers();
@@ -38,12 +31,13 @@ function App() {
       {/* <HomePage/> */}
       <RouterConfig/>
       <DualSelectComponent/>
-      <Search/>
+      {/* <Search/> */}
       {loading ? (
         <p>Loading...</p>
       ) : (
         entities?.data?.map(entity => <div key={entity.entityId}>{entity.displayName}</div>)
-      )}
+      )} 
+      {/* <DynamicTable/> */}
     
     </div>
   );
