@@ -4,6 +4,46 @@ import PaperLayout from '../PaperLayout/PaperLayout';
 import EntitySelect from '../EntitySelect/EntitySelect';
 import DynamicSearchForm from '../EntityDisplay/DynamicSearchForm';
 import TypeSelect from '../TypeSelect/TypeSelect';
+import DynamicTable from '../DynamicTable/DynamicTable';
+
+const response = {
+  isSuccess: true,
+  // data:[],
+  data: [
+    {
+      id: 1,
+      name: 'Document A',
+      date: '2022-01-01',
+      status: 'Available',
+      documentId: 'doc1',
+    },
+    {
+      id: 2,
+      name: 'Document B',
+      date: '2022-01-02',
+      status: 'Unavailable',
+      documentId: 'doc2',
+    },
+    {
+      id: 3,
+      name: 'Document C',
+      date: '2022-01-03',
+      status: 'Available',
+      documentId: 'doc3',
+    },
+    {
+      id: 4,
+      name: 'Document D',
+      date: '2022-01-04',
+      status: 'Processing',
+      documentId: 'doc4',
+    },
+  ],
+  errorDetails: {
+    errorCode: 0,
+    errorMessage: '',
+  },
+};
 
 const Search = () => {
   const [selectedType, setSelectedType] = useState('');
@@ -15,21 +55,26 @@ const Search = () => {
         </Typography>
       </Box>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={8} lg={12}>
+        <Grid item xs={12} md={12} lg={12}>
           <PaperLayout>
-          <TypeSelect onTypeChange={setSelectedType} />
-          {selectedType && (
-              <>
-                <EntitySelect />
-                <DynamicSearchForm />
-              </>
-            )}
-            {/* <Typography variant="body1" component="p">
-              Document Type
-            </Typography>
-            <EntitySelect />
-            <DynamicSearchForm /> */}
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6} lg={3}>
+                <TypeSelect onTypeChange={setSelectedType} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                {selectedType && <EntitySelect type={selectedType} />}
+              </Grid>
+            </Grid>
+            {selectedType && <DynamicSearchForm />}
           </PaperLayout>
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={3} sx={{marginTop:'16px'}}>
+        <Grid item xs={12} md={12} lg={12}>
+       
+            <DynamicTable response={response} />
+      
         </Grid>
       </Grid>
     </>

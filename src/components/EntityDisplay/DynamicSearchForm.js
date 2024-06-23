@@ -1,22 +1,67 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid, TextField, Button, Box, CircularProgress, Typography } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import { fetchEntityData } from '../../features/entities/searchSlice';
+import { setSearchFields } from '../../features/entities/entitiesSlice';
+import { debounce } from '../../utils/debounce';
+
 
 const DynamicSearchForm = () => {
   const dispatch = useDispatch();
   const { entities, selectedEntityId, loading, error } = useSelector(state => state.entities);
   const [formData, setFormData] = React.useState({});
+  const [formErrors, setFormErrors] = React.useState({});
+
+    // Custom debounce function
+    const debounceDispatchFormData = useCallback(debounce((newFormData) => {
+      dispatch(setSearchFields(newFormData));
+    }, 300), [dispatch]); // 300ms debounce time
+
+  const validate = (data) => {
+    let errors = {};
+    // Example validation for required fields and data types
+    searchFields.forEach(field => {
+      if (field.isMandatory && !data[field.fieldId]) {
+        errors[field.fieldId] = 'This field is required';
+      } else if (field.dataType === 'number' && data[field.fieldId]) {
+        if (isNaN(data[field.fieldId])) {
+          errors[field.fieldId] = 'Must be a number';
+        } else if (data[field.fieldId] < field.minValue || data[field.fieldId] > field.maxValue) {
+          errors[field.fieldId] = `Must be between ${field.minValue} and ${field.maxValue}`;
+        }
+      }
+    });
+    return errors;
+  };
 
   // Extract searchFields for the selected entityId
   const searchFields = entities?.resultData?.find(entity => entity.entityId === selectedEntityId)?.searchFields || [];
 
   const handleChange = (fieldId, value) => {
-    setFormData(prev => ({ ...prev, [fieldId]: value }));
+    // Update the local form data state
+    setFormData(prev => {
+      const newFormData = { ...prev, [fieldId]: value };
+      
+     // Use debounced function to update Redux state
+     debounceDispatchFormData(newFormData);
+      
+      // Optionally clear errors as the user types
+      setFormErrors(prevErrors => ({ ...prevErrors, [fieldId]: null }));
+
+      return newFormData;
+  });
   };
 
   const handleSubmit = () => {
     console.log('Submitting form data:', formData);
-    // Here you can dispatch an action to handle form submission
+     // Dispatch action to store formData in Redux
+     const errors = validate(formData);
+     if (Object.keys(errors).length === 0) {
+       dispatch(fetchEntityData({ entityId: selectedEntityId, body: formData }));
+     } else {
+       setFormErrors(errors);
+     }
   };
 
   if (loading) return <CircularProgress />;
@@ -44,12 +89,14 @@ const DynamicSearchForm = () => {
               // type={field.dataType === 'string' ? 'text' : 'number'}
               type={field.dataType.toLowerCase()}
               required={field.isMandatory}
+              error={!!formErrors[field.fieldId]}
+              helperText={formErrors[field.fieldId]}
             />
           </Grid>
         ))}
         {searchFields.length > 0 && (
           <Grid item sx={{marginTop: '10px'}}>
-            <Button variant="contained" color="primary" onClick={handleSubmit}>
+            <Button variant="contained" color="primary" onClick={handleSubmit} startIcon={<SearchIcon fontSize='12px'/>}>
               Search
             </Button>
           </Grid>

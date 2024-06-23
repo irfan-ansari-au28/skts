@@ -4,17 +4,13 @@ import { useEffect } from 'react';
 import Login from './components/Login/Login';
 import HomePage from './pages/HomePage';
 import RouterConfig from './RouterConfig';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchEntities } from './features/entities/entitiesSlice';
-import DualSelectComponent from './components/test/Test';
+// import DualSelectComponent from './components/test/Test';
 import Search from './components/pages/Search';
 import DynamicTable from './components/DynamicTable/DynamicTable';
 
 
 function App() {
 
-  const dispatch = useDispatch();
-  const { entities, loading, error } = useSelector(state => state.entities);
 
 
   useEffect(() => {
@@ -30,14 +26,10 @@ function App() {
       {/* <Login /> */}
       {/* <HomePage/> */}
       <RouterConfig/>
-      <DualSelectComponent/>
+      {/* <DualSelectComponent/> */}
       {/* <Search/> */}
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        entities?.data?.map(entity => <div key={entity.entityId}>{entity.displayName}</div>)
-      )} 
-      {/* <DynamicTable/> */}
+
+
     
     </div>
   );

@@ -9,218 +9,141 @@ import {
   TableRow,
   Paper,
   Button,
+  TableSortLabel,
+  TablePagination,
+  Box,
 } from '@mui/material';
-
-const response = {
-  isSuccess: true,
-  data: [
-    {
-      id: 1,
-      name: 'Document A',
-      date: '2022-01-01',
-      status: 'Available',
-      documentId: 'doc1',
-    },
-    {
-      id: 2,
-      name: 'Document B',
-      date: '2022-01-02',
-      status: 'Unavailable',
-      documentId: 'doc2',
-    },
-    {
-      id: 3,
-      name: 'Document C',
-      date: '2022-01-03',
-      status: 'Available',
-      documentId: 'doc3',
-    },
-    {
-      id: 4,
-      name: 'Document D',
-      date: '2022-01-04',
-      status: 'Processing',
-      documentId: 'doc4',
-    },
-  ],
-  errorDetails: {
-    errorCode: 0,
-    errorMessage: '',
-  },
-};
+import DownloadIcon from '../../assets/icons/DownloadIcon';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchEntityData } from '../../features/entities/searchSlice';
 
 function DynamicTable({ entityId }) {
-  const [data, setData] = useState([]);
+  const dispatch = useDispatch();
+  const { data, pageDetails, loading, error } = useSelector((state) => state.entity);
   const [selected, setSelected] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(2);
+  const [order, setOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('');
 
-  // Fetching data
-  useEffect(() => {
-    const fetchData = async () => {
-      // const response = await fetch(`${BaseURL}/api/v1/entity/${entityId}/search`);
-    //   const jsonData = await response.json();
-      setData(response.data);
-    };
-    fetchData();
-  }, [entityId]);
+  // useEffect(() => {
+  //   dispatch(fetchEntityData({ entityId, page, size: rowsPerPage, sortBy: orderBy, sortOrder: order }));
+  // }, [dispatch, entityId, page, rowsPerPage, orderBy, order]);
 
-  // Handling selection
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+    console.log(`Sorting ${property} by ${isAsc ? 'desc' : 'asc'} order`);
+  };
+
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelecteds = data.map((n) => n.fieldId);
+      setSelected(newSelecteds);
+      console.log('Selected all:', newSelecteds);
+      return;
+    }
+    setSelected([]);
+    console.log('Cleared all selections');
+  };
+
   const handleSelect = (event, id) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
+      console.log(`Added ${id} to selection`);
+    } else {
+      newSelected = selected.filter((itemId) => itemId !== id);
+      console.log(`Removed ${id} from selection`);
     }
 
     setSelected(newSelected);
   };
 
-  const handleDownload = async () => {
-    // API call to download files based on the `selected` array
-    // Example for multiple files download
-    //   const response = await fetch(`${BaseURL}/api/v1/document/download/bulk`, {
-    //     method: 'POST',
-    //     body: JSON.stringify({ documentIds: selected }),
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     }
-    //   });
-    // const response = {
-    //   isSuccess: true,
-    //   resultData: {
-    //     processId: 12345,
-    //     message: 'Bulk download initiated. Use processId to check status.',
-    //   },
-    //   errorDetails: {
-    //     errorCode: 0,
-    //     errorMessage: '',
-    //   },
-    // };
-
-    // const blob = await response.blob();
-    // const url = window.URL.createObjectURL(blob);
-    // const a = document.createElement('a');
-    // a.href = url;
-    // a.download = 'download.zip'; // Assuming the API returns a zip
-    // a.click();
+  const handleDownload = () => {
+    alert('Download initiated for selected documents.');
+    console.log('Downloading documents with IDs:', selected);
   };
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      // Select all ids from the data to mark as selected
-      const newSelecteds = data.map((n) => n.id);
-      setSelected(newSelecteds);
-      return;
-    }
-    // If not checked, clear the selection
-    setSelected([]);
-  };
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <TableContainer component={Paper}>
+      <Box display="flex" justifyContent="flex-end" width="100%">
+        <Button
+          startIcon={<DownloadIcon color={"white"} width={"12px"}  />}
+          variant="contained"
+          color="primary"
+          onClick={handleDownload}
+          disabled={selected.length === 0}
+          sx={{ m: 2 }}
+        >
+          Download
+        </Button>
+      </Box>
       <Table>
         <TableHead>
-          <TableRow>
+          <TableRow sx={{ backgroundColor: '#F8F8F8' }}>
             <TableCell padding="checkbox">
               <Checkbox
-                indeterminate={
-                  selected.length > 0 && selected.length < data.length
-                }
+                indeterminate={selected.length > 0 && selected.length < data.length}
                 checked={data.length > 0 && selected.length === data.length}
                 onChange={handleSelectAllClick}
               />
             </TableCell>
-            <TableCell>ID</TableCell>
-            <TableCell align="right">Name</TableCell>
-            <TableCell align="right">Date</TableCell>
-            <TableCell align="right">Status</TableCell>
+            {data.length > 0 && Object.keys(data[0]).map((key) => (
+              <TableCell
+                key={key}
+                align="left"
+                sortDirection={orderBy === key ? order : false}
+                sx={{ fontWeight: 'bold', fontSize: '1rem', textTransform:'lowercase' }}
+              >
+                <TableSortLabel
+                  active={orderBy === key}
+                  direction={orderBy === key ? order : 'asc'}
+                  onClick={(event) => handleRequestSort(event, key)}
+                >
+                  {key.toUpperCase()}
+                </TableSortLabel>
+              </TableCell>
+            ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row) => (
+          {data.map((row, index) => (
             <TableRow
-              key={row.id}
+              key={index}
               hover
-              onClick={(event) => handleSelect(event, row.id)}
+              onClick={(event) => handleSelect(event, row.fieldId)}
               role="checkbox"
-              aria-checked={selected.indexOf(row.id) !== -1}
-              selected={selected.indexOf(row.id) !== -1}
+              aria-checked={selected.includes(row.fieldId)}
+              selected={selected.includes(row.fieldId)}
             >
               <TableCell padding="checkbox">
-                <Checkbox
-                  checked={selected.indexOf(row.id) !== -1}
-                  inputProps={{
-                    'aria-labelledby': `enhanced-table-checkbox-${row.id}`,
-                  }}
-                />
+                <Checkbox checked={selected.includes(row.fieldId)} />
               </TableCell>
-              <TableCell component="th" scope="row">
-                {row.id}
-              </TableCell>
-              <TableCell align="right">{row.name}</TableCell>
-              <TableCell align="right">{row.date}</TableCell>
-              <TableCell align="right">{row.status}</TableCell>
+              {Object.entries(row).map(([key, value]) => (
+                <TableCell key={`${key}-${index}`} align="left">{value}</TableCell>
+              ))}
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <Button onClick={handleDownload} disabled={selected.length === 0}>
-        Download
-      </Button>
+      <TablePagination
+        rowsPerPageOptions={[2, 4, 6]}
+        component="div"
+        count={data.length} // Adjust based on total records
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={(event, newPage) => setPage(newPage)}
+        onRowsPerPageChange={(event) => setRowsPerPage(parseInt(event.target.value, 10))}
+      />
     </TableContainer>
-
-    // <TableContainer component={Paper}>
-    //   <Table>
-    //     <TableHead>
-    //       <TableRow>
-    //         <TableCell padding="checkbox">
-    //           <Checkbox
-    //             indeterminate={
-    //               selected.length > 0 && selected.length < data.length
-    //             }
-    //             checked={data.length > 0 && selected.length === data.length}
-    //             onChange={(event) => handleSelectAllClick(event, data)}
-    //           />
-    //         </TableCell>
-    //         <TableCell>ID</TableCell>
-    //         <TableCell align="right">Name</TableCell>
-    //         <TableCell align="right">Date</TableCell>
-    //         <TableCell align="right">Status</TableCell>
-    //       </TableRow>
-    //     </TableHead>
-    //     <TableBody>
-    //       {data.map((row) => (
-    //         <TableRow key={row.id} selected={selected.indexOf(row.id) !== -1}>
-    //           <TableCell padding="checkbox">
-    //             <Checkbox
-    //               checked={selected.indexOf(row.id) !== -1}
-    //               onChange={(event) => handleSelect(event, row.id)}
-    //             />
-    //           </TableCell>
-    //           <TableCell component="th" scope="row">
-    //             {row.id}
-    //           </TableCell>
-    //           <TableCell align="right">{row.name}</TableCell>
-    //           <TableCell align="right">{row.date}</TableCell>
-    //           <TableCell align="right">{row.status}</TableCell>
-    //         </TableRow>
-    //       ))}
-    //     </TableBody>
-    //   </Table>
-    //   <Button onClick={handleDownload} disabled={selected.length === 0}>
-    //     Download
-    //   </Button>
-    // </TableContainer>
   );
 }
 
-export default DynamicTable
+export default DynamicTable;

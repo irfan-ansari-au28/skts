@@ -18,6 +18,7 @@ const entitiesSlice = createSlice({
   name: 'entities',
   initialState: {
     entities: [],
+    searchFields: {}, 
     selectedEntityId: '',
     loading: false,
     error: null,
@@ -25,6 +26,9 @@ const entitiesSlice = createSlice({
   reducers: {
     setSelectedEntityId: (state, action) => {
         state.selectedEntityId = action.payload;
+    },
+    setSearchFields: (state, action) => {  
+      state.searchFields = action.payload;
     }
 },
   extraReducers: (builder) => {
@@ -43,7 +47,7 @@ const entitiesSlice = createSlice({
   }
 });
 
-export const { setSelectedEntityId } = entitiesSlice.actions;
+export const { setSelectedEntityId, setSearchFields } = entitiesSlice.actions;
 
 
 export default entitiesSlice.reducer;

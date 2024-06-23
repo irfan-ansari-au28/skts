@@ -3,7 +3,7 @@ import React from 'react';
 const DownloadIcon = (props) => {
   return (
     <svg
-      width="20"
+      width={props.width || "20"}
       height="21"
       viewBox="0 0 20 21"
       fill="red"
