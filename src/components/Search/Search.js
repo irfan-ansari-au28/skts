@@ -7,49 +7,11 @@ import TypeSelect from '../TypeSelect/TypeSelect';
 import DynamicTable from '../DynamicTable/DynamicTable';
 import { useSelector } from 'react-redux';
 
-// const response = {
-//   isSuccess: true,
-//   // data:[],
-//   data: [
-//     {
-//       id: 1,
-//       name: 'Document A',
-//       date: '2022-01-01',
-//       status: 'Available',
-//       documentId: 'doc1',
-//     },
-//     {
-//       id: 2,
-//       name: 'Document B',
-//       date: '2022-01-02',
-//       status: 'Unavailable',
-//       documentId: 'doc2',
-//     },
-//     {
-//       id: 3,
-//       name: 'Document C',
-//       date: '2022-01-03',
-//       status: 'Available',
-//       documentId: 'doc3',
-//     },
-//     {
-//       id: 4,
-//       name: 'Document D',
-//       date: '2022-01-04',
-//       status: 'Processing',
-//       documentId: 'doc4',
-//     },
-//   ],
-//   errorDetails: {
-//     errorCode: 0,
-//     errorMessage: '',
-//   },
-// };
 
 const Search = () => {
   const [selectedType, setSelectedType] = useState('');
   const [showTable, setShowTable] =  useState(false)
-  const { data, pageDetails, loading, error } = useSelector((state) => state.entity);
+  // const { data, pageDetails, loading, error } = useSelector((state) => state.entity);
   return (
     <>
       <Box sx={{ pb: 3 }}>
@@ -75,9 +37,7 @@ const Search = () => {
 
       <Grid container spacing={3} sx={{marginTop:'16px'}}>
         <Grid item xs={12} md={12} lg={12}>
-       
-            {showTable && <DynamicTable  />}
-      
+            {showTable && <DynamicTable  />} 
         </Grid>
       </Grid>
     </>
