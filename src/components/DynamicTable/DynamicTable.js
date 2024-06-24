@@ -12,6 +12,8 @@ import {
   TableSortLabel,
   TablePagination,
   Box,
+  CircularProgress,
+  Typography,
 } from '@mui/material';
 import DownloadIcon from '../../assets/icons/DownloadIcon';
 import { useDispatch, useSelector } from 'react-redux';
@@ -22,7 +24,7 @@ function DynamicTable({ entityId }) {
   const { data, pageDetails, loading, error } = useSelector((state) => state.entity);
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(2);
+  const [rowsPerPage, setRowsPerPage] = useState(50);
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('');
 
@@ -35,6 +37,7 @@ function DynamicTable({ entityId }) {
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
     console.log(`Sorting ${property} by ${isAsc ? 'desc' : 'asc'} order`);
+    dispatch(fetchEntityData({ entityId:1, page, size: rowsPerPage, sortBy: "minvalue", sortOrder: order, body:{key:"123"} }));
   };
 
   const handleSelectAllClick = (event) => {
@@ -69,7 +72,21 @@ function DynamicTable({ entityId }) {
   };
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  // if (error) return <p>Error: {error}</p>;
+
+    // If no data, return a message or null to avoid rendering the table
+    if (!data || data.length === 0) {
+      return loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <Typography variant="h6" align="center" sx={{ mt: 4 }}>
+          No data available.
+        </Typography>
+      );
+    }
+  
 
   return (
     <TableContainer component={Paper}>
@@ -124,17 +141,27 @@ function DynamicTable({ entityId }) {
               selected={selected.includes(row.fieldId)}
             >
               <TableCell padding="checkbox">
-                <Checkbox checked={selected.includes(row.fieldId)} />
+                <Checkbox 
+                checked={selected.includes(row.fieldId)}           
+                sx={{
+                    color: 'grey',
+                    '&.Mui-checked': {
+                      color: '#4a4a4a',
+                    },
+                    '&:hover': {
+                      backgroundColor: 'rgba(74, 74, 74, 0.04)',
+                    },
+                  }} />
               </TableCell>
               {Object.entries(row).map(([key, value]) => (
-                <TableCell key={`${key}-${index}`} align="left">{value}</TableCell>
+                <TableCell sx={{fontWeight:'500', color:'#190134'}} key={`${key}-${index}`} align="left">{value}</TableCell>
               ))}
             </TableRow>
           ))}
         </TableBody>
       </Table>
       <TablePagination
-        rowsPerPageOptions={[2, 4, 6]}
+        rowsPerPageOptions={[]}
         component="div"
         count={data.length} // Adjust based on total records
         rowsPerPage={rowsPerPage}

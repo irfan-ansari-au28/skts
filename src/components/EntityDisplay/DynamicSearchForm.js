@@ -7,7 +7,7 @@ import { setSearchFields } from '../../features/entities/entitiesSlice';
 import { debounce } from '../../utils/debounce';
 
 
-const DynamicSearchForm = () => {
+const DynamicSearchForm = ({onSubmit}) => {
   const dispatch = useDispatch();
   const { entities, selectedEntityId, loading, error } = useSelector(state => state.entities);
   const [formData, setFormData] = React.useState({});
@@ -58,6 +58,7 @@ const DynamicSearchForm = () => {
      // Dispatch action to store formData in Redux
      const errors = validate(formData);
      if (Object.keys(errors).length === 0) {
+      onSubmit(true)
        dispatch(fetchEntityData({ entityId: selectedEntityId, body: formData }));
      } else {
        setFormErrors(errors);
@@ -87,7 +88,7 @@ const DynamicSearchForm = () => {
               value={formData[field.fieldId] || ''}
               onChange={(e) => handleChange(field.fieldId, e.target.value)}
               // type={field.dataType === 'string' ? 'text' : 'number'}
-              type={field.dataType.toLowerCase()}
+              type={field.dataType.toLowerCase()  === 'string' ? 'text' : 'number'}
               required={field.isMandatory}
               error={!!formErrors[field.fieldId]}
               helperText={formErrors[field.fieldId]}
