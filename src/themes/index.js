@@ -17,6 +17,14 @@ const themes = () =>
       },
     },
     typography: { ...typography },
+    components: {
+      // Configure the default props for MUI TextField
+      MuiTextField: {
+        defaultProps: {
+          size: 'small', // Set TextField size to small by default
+        },
+      },
+    },
   });
 
 export default themes;

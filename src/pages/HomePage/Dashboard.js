@@ -18,7 +18,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ListItems from './ListItems';
 import logo from '../../assets/images/cma-logo.png';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Button } from '@mui/material';
+import { Button, Alert } from '@mui/material';
 import { Outlet, useNavigate } from 'react-router-dom';
 
 // import Chart from './Chart';
@@ -76,6 +76,7 @@ const Drawer = styled(MuiDrawer, {
 export default function Dashboard() {
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate()
+
 
   const toggleDrawer = () => {
     // Only allow the drawer to toggle open if the screen width is greater than 768 pixels
@@ -175,12 +176,15 @@ export default function Dashboard() {
           flexGrow: 1,
           height: '100vh',
           overflow: 'auto',
+          paddingTop:'66px'
         }}
       >
-        <Toolbar />
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+
+        {/* <Toolbar /> */}
+        {/* <Container maxWidth="lg" sx={{ mt: 1, mb: 1 }}> */}
+      
           <Outlet />
-        </Container>
+        {/* </Container> */}
       </Box>
     </Box>
   );
