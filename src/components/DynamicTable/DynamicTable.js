@@ -317,6 +317,11 @@ function DynamicTable({ entityId }) {
         page={page}
         onPageChange={(event, newPage) => setPage(newPage)}
         onRowsPerPageChange={(event) => setRowsPerPage(parseInt(event.target.value, 10))}
+        sx={{
+          '& .MuiIconButton-root': {
+            color: 'primary.main', 
+          },
+        }}
       />
     </PaperLayout>
   );

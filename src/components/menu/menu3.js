@@ -28,8 +28,8 @@ const NestedDropdown = () => {
   useEffect(() => {
     // Mock fetching menu data
     const fetchData = async () => {
-        const datas = organizeDataByType(sampleData)
-        console.log(datas)
+      const datas = organizeDataByType(sampleData);
+      console.log(datas);
       setMenuData(organizeDataByType(sampleData));
     };
     fetchData();
@@ -45,24 +45,22 @@ const NestedDropdown = () => {
   };
 
   const handleSubmenuOpen = (type, event) => {
-    setSubMenuAnchors(prev => ({ ...prev, [type]: event.currentTarget }));
+    setSubMenuAnchors((prev) => ({ ...prev, [type]: event.currentTarget }));
   };
 
   const handleSubmenuClose = (type) => {
-    setSubMenuAnchors(prev => ({ ...prev, [type]: null }));
+    setSubMenuAnchors((prev) => ({ ...prev, [type]: null }));
   };
 
   const handleSelection = (entity) => {
-    console.log("Selected Entity:", entity);
+    console.log('Selected Entity:', entity);
+    setSelectedEntity(entity);
     handleClose();
   };
 
   const renderMenuItems = (type, items) => {
     return items.map((item) => (
-      <MenuItem 
-        key={item.entityId}
-        onClick={() => handleSelection(item)}
-      >
+      <MenuItem key={item.entityId} onClick={() => handleSelection(item)}>
         {item.displayname}
       </MenuItem>
     ));
@@ -70,6 +68,9 @@ const NestedDropdown = () => {
 
   return (
     <div>
+      <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
+        {'Document Type'}
+      </Typography>
       <Button
         aria-controls="simple-menu"
         aria-haspopup="true"
@@ -79,16 +80,21 @@ const NestedDropdown = () => {
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
-          width: '100%',
+          // width: '100%',
+          // maxWidth: "240px",
+          minWidth: '120px',
           textTransform: 'none',
           borderColor: 'rgba(0, 0, 0, 0.23)',
           '&:hover': {
             borderColor: 'rgba(0, 0, 0, 0.87)',
-          }
+          },
+          paddingTop: 1,
+          paddingBottom: 1,
         }}
       >
         <Typography variant="body2" color="text.secondary">
-          Document Type
+          {/* {selectedEntity && `${selectedEntity?.type} - ${selectedEntity?.entityName}` || "Document Type"} */}
+          {(selectedEntity && `${selectedEntity?.type}`) || 'Document Type'}
         </Typography>
       </Button>
       <Menu
@@ -116,7 +122,9 @@ const NestedDropdown = () => {
                   onClose={() => handleSubmenuClose(type)}
                   anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                   transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-                  MenuListProps={{ onMouseLeave: () => handleSubmenuClose(type) }}
+                  MenuListProps={{
+                    onMouseLeave: () => handleSubmenuClose(type),
+                  }}
                 >
                   {renderMenuItems(type, menuData[type])}
                 </Menu>
@@ -131,110 +139,110 @@ const NestedDropdown = () => {
       </Menu>
     </div>
   );
-}
+};
 
 export default NestedDropdown;
 
 const sampleData = [
   {
-    "type": "FNCA",
-    "entityName": "ZAPGFFUP",
-    "displayname": "ZAPGFFUP",
-    "entityId": 1,
-    "searchFields": [
+    type: 'Freight Cash Image',
+    entityName: 'ZAPEMPEXP',
+    displayname: 'ZAPEMPEXP',
+    entityId: 2,
+    searchFields: [
       {
-        "minValue": 4,
-        "fieldName": "COCD",
-        "displayName": "COCD",
-        "maxValue": 11,
-        "defaultValue": 11,
-        "dataType": "number",
-        "isMandatory": true,
-        "fieldId": 1,
-        "status": "ACTIVE"
+        minValue: 0,
+        fieldName: 'IS Create Date From',
+        displayName: 'IS Create Date From',
+        maxValue: 0,
+        defaultValue: 11,
+        dataType: 'date',
+        isMandatory: true,
+        fieldId: 1,
+        status: 'ACTIVE',
       },
       {
-        "minValue": 2,
-        "fieldName": "DOC_NUMBER",
-        "displayName": "DOCUMENT NUMBER",
-        "maxValue": 5.5,
-        "defaultValue": 2,
-        "dataType": "number",
-        "isMandatory": true,
-        "fieldId": 2,
-        "status": "ACTIVE"
+        minValue: 0,
+        fieldName: 'IS Create Date To',
+        displayName: 'IS Create Date To ',
+        maxValue: 0,
+        defaultValue: 2,
+        dataType: 'date',
+        isMandatory: true,
+        fieldId: 2,
+        status: 'ACTIVE',
       },
       {
-        "minValue": 0,
-        "fieldName": "YEAR",
-        "displayName": "YEAR",
-        "maxValue": 0,
-        "defaultValue": "Boy",
-        "dataType": "String",
-        "isMandatory": true,
-        "fieldId": 3,
-        "status": "ACTIVE"
-      }
-    ]
+        minValue: 0,
+        fieldName: 'Scan Batch ID',
+        displayName: 'Scan Batch ID',
+        maxValue: 0,
+        defaultValue: 'Boy',
+        dataType: 'text',
+        isMandatory: true,
+        fieldId: 3,
+        status: 'ACTIVE',
+      },
+    ],
   },
   {
-    "type": "FNCA",
-    "entityName": "ZAPFNCAEXP",
-    "displayname": "ZAPFNCAEXP",
-    "entityId": 3,
-    "searchFields": [
+    type: 'FNCA',
+    entityName: 'ZAPGFFUP',
+    displayname: 'ZAPGFFUP',
+    entityId: 1,
+    searchFields: [
       {
-        "minValue": 0,
-        "fieldName": "CREATION_DATE",
-        "displayName": "CREATION DATE",
-        "maxValue": 0,
-        "defaultValue": "2023-01-01",
-        "dataType": "date",
-        "isMandatory": false,
-        "fieldId": 4,
-        "status": "ACTIVE"
-      }
-    ]
+        minValue: 4,
+        fieldName: 'COCD',
+        displayName: 'COCD',
+        maxValue: 11,
+        defaultValue: 11,
+        dataType: 'number',
+        isMandatory: true,
+        fieldId: 1,
+        status: 'ACTIVE',
+      },
+      {
+        minValue: 2,
+        fieldName: 'DOC_NUMBER',
+        displayName: 'DOCUMENT NUMBER',
+        maxValue: 5.5,
+        defaultValue: 2,
+        dataType: 'number',
+        isMandatory: true,
+        fieldId: 2,
+        status: 'ACTIVE',
+      },
+      {
+        minValue: 0,
+        fieldName: 'YEAR',
+        displayName: 'YEAR',
+        maxValue: 0,
+        defaultValue: 'Boy',
+        dataType: 'String',
+        isMandatory: true,
+        fieldId: 3,
+        status: 'ACTIVE',
+      },
+    ],
   },
   {
-    "type": "FCA",
-    "entityName": "ZAPEMPEXP",
-    "displayname": "ZAPEMPEXP",
-    "entityId": 2,
-    "searchFields": [
+    type: 'FNCA',
+    entityName: 'ZAPFNCAEXP',
+    displayname: 'ZAPFNCAEXP',
+    entityId: 3,
+    searchFields: [
       {
-        "minValue": 0,
-        "fieldName": "IS Create Date From",
-        "displayName": "IS Create Date From",
-        "maxValue": 0,
-        "defaultValue": 11,
-        "dataType": "date",
-        "isMandatory": true,
-        "fieldId": 1,
-        "status": "ACTIVE"
+        minValue: 0,
+        fieldName: 'CREATION_DATE',
+        displayName: 'CREATION DATE',
+        maxValue: 0,
+        defaultValue: '2023-01-01',
+        dataType: 'date',
+        isMandatory: false,
+        fieldId: 4,
+        status: 'ACTIVE',
       },
-      {
-        "minValue": 0,
-        "fieldName": "IS Create Date To",
-        "displayName": "IS Create Date To ",
-        "maxValue": 0,
-        "defaultValue": 2,
-        "dataType": "date",
-        "isMandatory": true,
-        "fieldId": 2,
-        "status": "ACTIVE"
-      },
-      {
-        "minValue": 0,
-        "fieldName": "Scan Batch ID",
-        "displayName": "Scan Batch ID",
-        "maxValue": 0,
-        "defaultValue": "Boy",
-        "dataType": "text",
-        "isMandatory": true,
-        "fieldId": 3,
-        "status": "ACTIVE"
-      }
-    ]
-  }
+    ],
+  },
 ];
