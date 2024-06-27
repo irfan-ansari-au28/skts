@@ -20,6 +20,7 @@ const entitiesSlice = createSlice({
     entities: [],
     searchFields: {}, 
     selectedEntityId: '',
+    downloadNotification: false,
     loading: false,
     error: null,
   },
@@ -29,6 +30,9 @@ const entitiesSlice = createSlice({
     },
     setSearchFields: (state, action) => {  
       state.searchFields = action.payload;
+    },
+    setDownloadNotification: (state, action) => {
+      state.downloadNotification = action.payload
     }
 },
   extraReducers: (builder) => {
@@ -39,6 +43,8 @@ const entitiesSlice = createSlice({
       .addCase(fetchEntities.fulfilled, (state, action) => {
         state.entities = action.payload;
         state.loading = false;
+        // show bulk downlaod notification intiated
+        state.entities.showDownloadNotification= true
       })
       .addCase(fetchEntities.rejected, (state, action) => {
         state.loading = false;
@@ -47,7 +53,7 @@ const entitiesSlice = createSlice({
   }
 });
 
-export const { setSelectedEntityId, setSearchFields } = entitiesSlice.actions;
+export const { setSelectedEntityId, setSearchFields, setDownloadNotification } = entitiesSlice.actions;
 
 
 export default entitiesSlice.reducer;

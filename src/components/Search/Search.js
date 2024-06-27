@@ -5,21 +5,26 @@ import EntitySelect from '../EntitySelect/EntitySelect';
 import DynamicSearchForm from '../EntityDisplay/DynamicSearchForm';
 import TypeSelect from '../TypeSelect/TypeSelect';
 import DynamicTable from '../DynamicTable/DynamicTable';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import NestedDropdown from '../menu/menu3';
+import { setDownloadNotification } from '../../features/entities/entitiesSlice';
 
 const Search = () => {
   const [selectedType, setSelectedType] = useState('');
   const [showTable, setShowTable] = useState(false);
   const [alertOpen, setAlertOpen] = React.useState(true); // State to manage Alert visibility
+  const dispatch = useDispatch()
+
+  const {downloadNotification} = useSelector(state=>state.entities)
 
   const handleClose = () => {
+    dispatch(setDownloadNotification(false))
     setAlertOpen(false); // Hide the Alert when the close button is clicked
   };
   // const { data, pageDetails, loading, error } = useSelector((state) => state.entity);
   return (
     <>
-      {alertOpen && (
+      {downloadNotification && (
         <Alert
           onClose={handleClose}
           severity="success"

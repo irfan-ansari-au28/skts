@@ -24,6 +24,8 @@ import { fetchEntityData } from '../../features/entities/searchSlice';
 import PaperLayout from '../PaperLayout/PaperLayout';
 
 import CloseIcon from '@mui/icons-material/Close'; // For closing the Snackbar
+import { getPresignedUrl, processBulkDownload } from '../../api/apiService';
+import { setDownloadNotification } from '../../features/entities/entitiesSlice';
 
 // remove this sample data
 
@@ -205,10 +207,34 @@ function DynamicTable({ entityId }) {
     setSelected(newSelected);
   };
 
-  const handleDownload = () => {
-    alert('Download initiated for selected documents.');
-     // Trigger the download logic here
+
+  const handleDownload = async () => {
     console.log('Downloading documents with IDs:', selected);
+    if (selected.length === 1) {
+      // Single download case
+      try {
+        const documentId = selected[0];
+        const response = await getPresignedUrl('20', documentId);  // Assuming '20' is a placeholder for `entityName`
+        console.log('Presigned URL:', response);
+        window.open(response.url, '_blank');  // Assuming `url` is the key where the presigned URL is returned
+      } catch (error) {
+        console.error('Error fetching presigned URL:', error);
+        alert('Failed to fetch download link.');
+      }
+    } else if (selected.length > 1) {
+      // Bulk download case
+      dispatch(setDownloadNotification(true))
+      try {
+        const response = await processBulkDownload('20', selected);  // Assuming '20' is a placeholder for `entityName`
+        console.log('Bulk download initiated:', response);
+        alert('Bulk download initiated. Check your downloads for the file.');
+      } catch (error) {
+        console.error('Error initiating bulk download:', error);
+        alert('Failed to initiate bulk download.');
+      }
+    } else {
+      alert('No documents selected for download.');
+    }
   };
 
  

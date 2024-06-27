@@ -41,3 +41,28 @@ export const fetchEntityFields = async (entityId) => {
     }
 };
 
+
+export const processBulkDownload = async (entityName, documentIds) => {
+    try {
+        const response = await API.post(`/api/fileDownloadAndProcess/processBulkDownload?entityName=${entityName}`, {
+            documentIds: documentIds
+        });
+        console.log('Bulk download process initiated:', response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to initiate bulk download:', error.response ? error.response.data : 'Unknown error');
+        throw error;
+    }
+};
+
+// Function to get a presigned URL for downloading a document
+export const getPresignedUrl = async (entityName, documentId) => {
+    try {
+        const response = await API.get(`/api/fileDownloadAndProcess/presignedUrl?entityName=${entityName}&documentId=${documentId}`);
+        console.log('Presigned URL received:', response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to fetch presigned URL:', error.response ? error.response.data : 'Unknown error');
+        throw error;
+    }
+};
