@@ -23,7 +23,13 @@ const Search = () => {
     dispatch(setDownloadNotification(false))
   };
   
-  if (loading) return <CircularProgress />;
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <>
