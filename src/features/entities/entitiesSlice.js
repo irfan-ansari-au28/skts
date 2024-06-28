@@ -43,8 +43,6 @@ const entitiesSlice = createSlice({
       .addCase(fetchEntities.fulfilled, (state, action) => {
         state.entities = action.payload;
         state.loading = false;
-        // show bulk downlaod notification intiated
-        state.entities.showDownloadNotification= true
       })
       .addCase(fetchEntities.rejected, (state, action) => {
         state.loading = false;

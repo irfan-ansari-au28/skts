@@ -216,7 +216,15 @@ function DynamicTable({ entityId }) {
         const documentId = selected[0];
         const response = await getPresignedUrl('20', documentId);  // Assuming '20' is a placeholder for `entityName`
         console.log('Presigned URL:', response);
-        window.open(response.url, '_blank');  // Assuming `url` is the key where the presigned URL is returned
+        // window.open(response.data.downloadLink, '_blank');  // Assuming `url` is the key where the presigned URL is returned
+                   // Creating an anchor element and triggering download
+                   const link = document.createElement('a');
+                   link.href = response.data.downloadLink;
+                   // You can set a specific filename here
+                   link.download = "download.zip"; 
+                   document.body.appendChild(link);
+                   link.click();
+                   document.body.removeChild(link);
       } catch (error) {
         console.error('Error fetching presigned URL:', error);
         alert('Failed to fetch download link.');
@@ -225,9 +233,12 @@ function DynamicTable({ entityId }) {
       // Bulk download case
       dispatch(setDownloadNotification(true))
       try {
-        const response = await processBulkDownload('20', selected);  // Assuming '20' is a placeholder for `entityName`
+        const selectedIds =  [2,3,4]
+        const response = await processBulkDownload('20', selectedIds);  // Assuming '20' is a placeholder for `entityName`
         console.log('Bulk download initiated:', response);
-        alert('Bulk download initiated. Check your downloads for the file.');
+        // alert('Bulk download initiated. Check your downloads for the file.');
+        dispatch(setDownloadNotification(true))
+
       } catch (error) {
         console.error('Error initiating bulk download:', error);
         alert('Failed to initiate bulk download.');

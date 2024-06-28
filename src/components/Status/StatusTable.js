@@ -10,6 +10,8 @@ import {
   Link,
   TablePagination,
 } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { getPresignedUrl } from '../../api/apiService';
 
 const sampleData = [
   { date: '12/12/2001', status: 'Open', link: '#', id: 1 },
@@ -30,9 +32,16 @@ const columns = [
   { id: 'link', label: 'Download Link', minWidth: 170 },
 ];
 
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+}
+
 function StatusTable() {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(6);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const { statusData, status, error } = useSelector((state) => state.downloads);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -41,6 +50,16 @@ function StatusTable() {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const handleDownloadClick = async (url) => {
+    console.log(url,'url')
+    const id = 20
+    if (url) {
+      const presignedUrlData = await getPresignedUrl(url,id);
+      console.log(presignedUrlData)
+      window.open(presignedUrlData.data.downloadLink, '_blank');
+    }
   };
 
   return (
@@ -73,20 +92,31 @@ function StatusTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sampleData
+            {statusData
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => (
                 <TableRow key={row.id}>
-                  <TableCell>{row.date}</TableCell>
+                  <TableCell>{formatDate(row.createdOn)}</TableCell>
                   <TableCell>{row.status}</TableCell>
                   <TableCell>
-                    <Link
-                      href={row.link}
+                    {/* <Link
+                      href={row.link || '#'}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       Link
-                    </Link>
+                    </Link> */}
+                    {row.status === 'Completed' ? (
+                      <Link
+                        component="button"
+                        variant="body2"
+                        onClick={() => handleDownloadClick(row.downlloadLink)}
+                      >
+                        Download
+                      </Link>
+                    ) : (
+                      'Unavailable'
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
@@ -103,7 +133,7 @@ function StatusTable() {
         onRowsPerPageChange={handleChangeRowsPerPage}
         sx={{
           '& .MuiIconButton-root': {
-            color: 'primary.main', 
+            color: 'primary.main',
           },
         }}
       />

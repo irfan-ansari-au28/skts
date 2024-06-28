@@ -1,9 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Button, Container, Typography, Grid } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import StatusTable from '../Status/StatusTable';
+import { fetchDownloadStatus } from '../../api/apiService';
+import { fetchDownloadStatusAsync } from '../../features/entities/downloadSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const DownloadStatus = () => {
+  const dispatch = useDispatch()
+  useEffect(()=>{
+    dispatch(fetchDownloadStatusAsync())
+  },[])
+
+  const handleRefreshClick = () => {
+    dispatch(fetchDownloadStatusAsync());
+};
+
   return (
     <Container maxWidth="lg" sx={{ mt: 1, mb: 1 }}>
       <Grid container spacing={3}>
@@ -17,20 +29,20 @@ const DownloadStatus = () => {
             }}
           >
             <Typography variant="h2" component="h1" color={'#4A4A4A'}>
-            Download Status
+              Download Status
             </Typography>
             <Button
               variant="contained"
               color="error"
               startIcon={<RefreshIcon />}
-              onClick={() => console.log('Refreshing...')}
+              onClick={handleRefreshClick}
             >
               Refresh
             </Button>
           </Box>
         </Grid>
       </Grid>
-        <StatusTable  />
+      <StatusTable />
     </Container>
   );
 };
