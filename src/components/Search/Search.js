@@ -1,22 +1,19 @@
-import { Box, Grid, Paper, Typography, Alert, Container, CircularProgress } from '@mui/material';
+import { Box, Grid, Typography, Alert, Container, CircularProgress } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import PaperLayout from '../PaperLayout/PaperLayout';
-import EntitySelect from '../EntitySelect/EntitySelect';
 import DynamicSearchForm from '../EntityDisplay/DynamicSearchForm';
-import TypeSelect from '../TypeSelect/TypeSelect';
 import DynamicTable from '../DynamicTable/DynamicTable';
 import { useDispatch, useSelector } from 'react-redux';
-import NestedDropdown from '../menu/menu3';
 import { fetchEntities, setDownloadNotification } from '../../features/entities/entitiesSlice';
+import DropdownMenu from '../Menu/DropdownMenu';
 
 const Search = () => {
-  const [selectedType, setSelectedType] = useState('');
+  // const [selectedType, setSelectedType] = useState('');
   const [showTable, setShowTable] = useState(false);
-  const [alertOpen, setAlertOpen] = React.useState(true); // State to manage Alert visibility
   const dispatch = useDispatch()
 
   const {downloadNotification} = useSelector(state=>state.entities)
-  const { entities, loading, error, selectedEntity } = useSelector(state => state.entities); 
+  const { loading, selectedEntity } = useSelector(state => state.entities); 
 
   useEffect(()=>{
     dispatch(fetchEntities())
@@ -24,10 +21,10 @@ const Search = () => {
 
   const handleClose = () => {
     dispatch(setDownloadNotification(false))
-    setAlertOpen(false); // Hide the Alert when the close button is clicked
   };
-  // const { data, pageDetails, loading, error } = useSelector((state) => state.entity);
+  
   if (loading) return <CircularProgress />;
+
   return (
     <>
       {downloadNotification && (
@@ -58,7 +55,7 @@ const Search = () => {
               <Grid container spacing={3}>
                 <Grid item xs={12} md={4} lg={3}>
                   {/* // Option 1 Menu */}
-                  {!loading && <NestedDropdown />}
+                  {!loading && <DropdownMenu />}
                 </Grid>
               </Grid>
               {selectedEntity && <DynamicSearchForm onSubmit={setShowTable} />}

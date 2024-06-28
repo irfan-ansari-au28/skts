@@ -22,14 +22,15 @@ const organizeDataByType = (data) => {
   }, {});
 };
 
-const NestedDropdown = () => {
+const DropdownMenu = () => {
   const [menuData, setMenuData] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
   const [subMenuAnchors, setSubMenuAnchors] = useState({});
   const [selectedEntity, setSelectedEntity] = useState(null);
 
-  const { entities, loading, error } = useSelector(state => state.entities); 
+  const { entities} = useSelector(state => state.entities); 
   const dispatch = useDispatch();
+  
   useEffect(() => {
     // Mock fetching menu data
     const fetchData = async () => {
@@ -39,6 +40,7 @@ const NestedDropdown = () => {
       setMenuData(organizeDataByType(res));
     };
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleOpen = (event) => {
@@ -150,108 +152,6 @@ const NestedDropdown = () => {
   );
 };
 
-export default NestedDropdown;
+export default DropdownMenu;
 
-const sampleData = [
-  {
-    type: 'Freight Cash Image',
-    entityName: 'ZAPEMPEXP',
-    displayname: 'ZAPEMPEXP',
-    entityId: 2,
-    searchFields: [
-      {
-        minValue: 0,
-        fieldName: 'IS Create Date From',
-        displayName: 'IS Create Date From',
-        maxValue: 0,
-        defaultValue: 11,
-        dataType: 'date',
-        isMandatory: true,
-        fieldId: 1,
-        status: 'ACTIVE',
-      },
-      {
-        minValue: 0,
-        fieldName: 'IS Create Date To',
-        displayName: 'IS Create Date To ',
-        maxValue: 0,
-        defaultValue: 2,
-        dataType: 'date',
-        isMandatory: true,
-        fieldId: 2,
-        status: 'ACTIVE',
-      },
-      {
-        minValue: 0,
-        fieldName: 'Scan Batch ID',
-        displayName: 'Scan Batch ID',
-        maxValue: 0,
-        defaultValue: 'Boy',
-        dataType: 'text',
-        isMandatory: true,
-        fieldId: 3,
-        status: 'ACTIVE',
-      },
-    ],
-  },
-  {
-    type: 'FNCA',
-    entityName: 'ZAPGFFUP',
-    displayname: 'ZAPGFFUP',
-    entityId: 1,
-    searchFields: [
-      {
-        minValue: 4,
-        fieldName: 'COCD',
-        displayName: 'COCD',
-        maxValue: 11,
-        defaultValue: 11,
-        dataType: 'number',
-        isMandatory: true,
-        fieldId: 1,
-        status: 'ACTIVE',
-      },
-      {
-        minValue: 2,
-        fieldName: 'DOC_NUMBER',
-        displayName: 'DOCUMENT NUMBER',
-        maxValue: 5.5,
-        defaultValue: 2,
-        dataType: 'number',
-        isMandatory: true,
-        fieldId: 2,
-        status: 'ACTIVE',
-      },
-      {
-        minValue: 0,
-        fieldName: 'YEAR',
-        displayName: 'YEAR',
-        maxValue: 0,
-        defaultValue: 'Boy',
-        dataType: 'String',
-        isMandatory: true,
-        fieldId: 3,
-        status: 'ACTIVE',
-      },
-    ],
-  },
-  {
-    type: 'FNCA',
-    entityName: 'ZAPFNCAEXP',
-    displayname: 'ZAPFNCAEXP',
-    entityId: 3,
-    searchFields: [
-      {
-        minValue: 0,
-        fieldName: 'CREATION_DATE',
-        displayName: 'CREATION DATE',
-        maxValue: 0,
-        defaultValue: '2023-01-01',
-        dataType: 'date',
-        isMandatory: false,
-        fieldId: 4,
-        status: 'ACTIVE',
-      },
-    ],
-  },
-];
+

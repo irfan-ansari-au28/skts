@@ -9,7 +9,7 @@ const rootReducer = combineReducers({
   entity: entityReducer,
   downloads: downloadReducer,
   // Include other reducers here
-  //   documents: documentsReducer,
+
 });
 
 export default rootReducer;

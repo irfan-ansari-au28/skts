@@ -15,12 +15,9 @@ import { debounce } from '../../utils/debounce';
 
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { deserializeDate, serializeDate } from '../../utils/helper';
 
-// Helper functions to handle date serialization
-const serializeDate = (date) =>
-  date instanceof Date ? date.toISOString() : date;
-const deserializeDate = (isoString) =>
-  isoString ? new Date(isoString) : isoString;
+
 
 const DynamicSearchForm = ({ onSubmit }) => {
   const dispatch = useDispatch();
@@ -76,31 +73,7 @@ const DynamicSearchForm = ({ onSubmit }) => {
     return errors;
   };
 
-  // const validate = (data) => {
-  //   let errors = {};
-  //   // Example validation for required fields and data types
-  //   searchFields.forEach((field) => {
-  //     if (field.isMandatory && !data[field.fieldId]) {
-  //       errors[field.fieldId] = 'This field is required';
-  //     } else if (field.dataType === 'number' && data[field.fieldId]) {
-  //       if (isNaN(data[field.fieldId])) {
-  //         errors[field.fieldId] = 'Must be a number';
-  //       } else if (
-  //         data[field.fieldId] < field.minValue ||
-  //         data[field.fieldId] > field.maxValue
-  //       ) {
-  //         errors[field.fieldId] =
-  //           `Must be between ${field.minValue} and ${field.maxValue}`;
-  //       }
-  //     }
-  //   });
-  //   return errors;
-  // };
-
-  // Extract searchFields for the selected entityId
-  // const searchFields =
-  //   entities?.resultData?.find((entity) => entity.entityId === selectedEntityId)
-  //     ?.searchFields || [];
+  // TODO : remove
   const searchFields = [
     {
       minValue: 0,
@@ -162,42 +135,6 @@ const DynamicSearchForm = ({ onSubmit }) => {
     });
   };
 
-  // const handleChange = (fieldId, value) => {
-  //   const field = searchFields.find((field) => field.fieldId === fieldId);
-  //   const formattedValue =
-  //     field.dataType === 'date' ? serializeDate(value) : value;
-
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     [fieldId]: formattedValue,
-  //   }));
-
-  //   // Update Redux store with serialized data
-  //   debounceDispatchFormData({
-  //     ...formData,
-  //     [fieldId]: formattedValue,
-  //   });
-
-  //   setFormErrors((prevErrors) => ({
-  //     ...prevErrors,
-  //     [fieldId]: null,
-  //   }));
-  // };
-
-  // const handleChange = (fieldId, value) => {
-  //   // Update the local form data state
-  //   setFormData((prev) => {
-  //     const newFormData = { ...prev, [fieldId]: value };
-
-  //     // Use debounced function to update Redux state
-  //     debounceDispatchFormData(newFormData);
-
-  //     // Optionally clear errors as the user types
-  //     setFormErrors((prevErrors) => ({ ...prevErrors, [fieldId]: null }));
-
-  //     return newFormData;
-  //   });
-  // };
 
   const handleSubmit = () => {
     console.log('Submitting form data:', formData);
@@ -215,70 +152,23 @@ const DynamicSearchForm = ({ onSubmit }) => {
   if (error) return <Typography color="error">{error}</Typography>;
 
   return (
-    // <Box sx={{}}>
-    //   <Grid container spacing={2} alignItems="stretch">
-    //     {searchFields.map((field) => (
-    //       <Grid item xs key={field.fieldId}>
-    //         <Typography variant="body1" sx={{  fontWeight: 'medium' }}>
-    //           {field.displayName}
-    //           {field.isMandatory && <span style={{ color: 'red' }}>*</span>}
-    //         </Typography>
-    //         <TextField
-    //           // fullWidth
-    //           sx={{
-    //             minWidth: {
-    //               xs: '120px',
-    //               sm: '240px',
-    //             },
-    //             marginTop: '10px',
-    //           }}
-    //           size="small"
-    //           // label={field.displayName}
-    //           variant="outlined"
-    //           value={formData[field.fieldId] || ''}
-    //           onChange={(e) => handleChange(field.fieldId, e.target.value)}
-    //           // type={field.dataType === 'string' ? 'text' : 'number'}
-    //           type={
-    //             field.dataType.toLowerCase() === 'string' ? 'text' : 'number'
-    //           }
-    //           required={field.isMandatory}
-    //           error={!!formErrors[field.fieldId]}
-    //           helperText={formErrors[field.fieldId]}
-    //           // Generic placeholder for all fields
-    //           InputProps={{
-    //             placeholder: `${field.displayName}`,
-    //             style: { color: '#555770' }
-    //           }}
-    //         />
-    //       </Grid>
-    //     ))}
-    //     {searchFields.length > 0 && (
-    //       <Grid item sx={{ marginTop: '10px' }}>
-    //         <Button
-    //           variant="contained"
-    //           color="primary"
-    //           onClick={handleSubmit}
-    //           startIcon={<SearchIcon fontSize="12px" />}
-    //         >
-    //           Search
-    //         </Button>
-    //       </Grid>
-    //     )}
-    //   </Grid>
-    // </Box>
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      {/* // Debuger BOX */}
-      {/* <Box component="div" sx={{ marginTop: 2 }}>
-  {Object.keys(formErrors).length > 0 && (
-    <div>
-      <Typography variant="h6" color="error">Form Errors:</Typography>
-      {Object.entries(formErrors).map(([fieldId, message]) => (
-        <p key={fieldId}><strong>Field ID {fieldId}:</strong> {message}</p>
-      ))}
-    </div>
-  )}
-</Box> */}
-      <Box sx={{}}>
+      {/* // Debuger BOX
+      <Box component="div" sx={{ marginTop: 2 }}>
+        {Object.keys(formErrors).length > 0 && (
+          <div>
+            <Typography variant="h6" color="error">
+              Form Errors:
+            </Typography>
+            {Object.entries(formErrors).map(([fieldId, message]) => (
+              <p key={fieldId}>
+                <strong>Field ID {fieldId}:</strong> {message}
+              </p>
+            ))}
+          </div>
+        )}
+      </Box> */}
+      <Box >
         <Grid container spacing={2} alignItems="center">
           {searchFields.map((field) => (
             <Grid
@@ -305,7 +195,7 @@ const DynamicSearchForm = ({ onSubmit }) => {
                   onChange={(newValue) => handleChange(field.fieldId, newValue)}
                   slotProps={{
                     textField: {
-                      size: "small",
+                      size: 'small',
                       error: !!formErrors[field.fieldId],
                       helperText: formErrors[field.fieldId] || ' ',
                       fullWidth: true,

@@ -1,38 +1,12 @@
-import './App.css';
-import { useEffect } from 'react';
-// import { fetchEntities, fetchEntityFields, fetchUsers } from './api/apiService';
-import Login from './components/Login/Login';
-import HomePage from './pages/HomePage';
 import RouterConfig from './RouterConfig';
-// import DualSelectComponent from './components/test/Test';
-import Search from './components/pages/Search';
-import DynamicTable from './components/DynamicTable/DynamicTable';
+import './App.css';
 
-
-function App() {
-
-
-
-  useEffect(() => {
-    // fetchUsers();
-    // fetchEntityFields('10001')
-  }, []);
-
+const App = () => {
   return (
     <div>
-        
-     
-   
-      {/* <Login /> */}
-      {/* <HomePage/> */}
-      <RouterConfig/>
-      {/* <DualSelectComponent/> */}
-      {/* <Search/> */}
-
-
-    
+      <RouterConfig />
     </div>
   );
-}
+};
 
 export default App;

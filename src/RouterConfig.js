@@ -1,10 +1,9 @@
 import React, { lazy, Suspense } from 'react';
-import { Routes, Route, BrowserRouter as Router } from 'react-router-dom';
+import { Routes, Route} from 'react-router-dom';
 import HomePage from '../src/pages/HomePage/index';
 import Login from './components/Login/Login';
 
 // Lazy loaded components
-// const HomePage = lazy(() => import('../src/pages/HomePage/index'));
 const Search = lazy(() => import('../src/components/Search/Search'));
 const Download = lazy(() => import('../src/components/Download/Download'));
 
