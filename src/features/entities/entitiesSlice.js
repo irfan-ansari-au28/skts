@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import API from '../../api/axios';
+import {fetchAllEntities} from '../../api/apiService'
 
 // Async thunk for fetching entities
 export const fetchEntities = createAsyncThunk(
   'entities/fetchEntities',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await API.get(`/api/v1/entity/all`);
-      return response.data;
+      const response = await fetchAllEntities()
+      return response
     } catch (error) {
       return rejectWithValue(error.response.data);
     }

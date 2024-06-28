@@ -9,22 +9,13 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ListItems from './ListItems';
 import logo from '../../assets/images/cma-logo.png';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Button, Alert } from '@mui/material';
+import { Button } from '@mui/material';
 import { Outlet, useNavigate } from 'react-router-dom';
-
-// import Chart from './Chart';
-// import Deposits from './Deposits';
-// import Orders from './Orders';
-
 
 
 const drawerWidth = 180;
@@ -75,8 +66,7 @@ const Drawer = styled(MuiDrawer, {
 
 export default function Dashboard() {
   const [open, setOpen] = React.useState(false);
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
 
   const toggleDrawer = () => {
     // Only allow the drawer to toggle open if the screen width is greater than 768 pixels
@@ -166,6 +156,9 @@ export default function Dashboard() {
           <ListItems />
         </List>
       </Drawer>
+      
+      {/* Router Outlet for Dashboard pages */}
+      
       <Box
         component="main"
         sx={{
@@ -176,15 +169,10 @@ export default function Dashboard() {
           flexGrow: 1,
           height: '100vh',
           overflow: 'auto',
-          paddingTop:'66px'
+          paddingTop: '66px',
         }}
       >
-
-        {/* <Toolbar /> */}
-        {/* <Container maxWidth="lg" sx={{ mt: 1, mb: 1 }}> */}
-      
-          <Outlet />
-        {/* </Container> */}
+        <Outlet />
       </Box>
     </Box>
   );
