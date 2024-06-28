@@ -3,6 +3,8 @@ import { Button, Menu, MenuItem, Typography } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectEntityAsync } from '../../features/entities/entitiesSlice';
 
 const organizeDataByType = (data) => {
   if (!data || data.length === 0) {
@@ -10,7 +12,8 @@ const organizeDataByType = (data) => {
   }
 
   return data.reduce((acc, entity) => {
-    const { type } = entity;
+    // const { type } = entity;
+    const type = entity.type || "Type 2"
     if (!acc[type]) {
       acc[type] = [];
     }
@@ -25,12 +28,15 @@ const NestedDropdown = () => {
   const [subMenuAnchors, setSubMenuAnchors] = useState({});
   const [selectedEntity, setSelectedEntity] = useState(null);
 
+  const { entities, loading, error } = useSelector(state => state.entities); 
+  const dispatch = useDispatch();
   useEffect(() => {
     // Mock fetching menu data
     const fetchData = async () => {
-      const datas = organizeDataByType(sampleData);
+      const res = entities.resultData
+      const datas = organizeDataByType(res);
       console.log(datas);
-      setMenuData(organizeDataByType(sampleData));
+      setMenuData(organizeDataByType(res));
     };
     fetchData();
   }, []);
@@ -55,13 +61,16 @@ const NestedDropdown = () => {
   const handleSelection = (entity) => {
     console.log('Selected Entity:', entity);
     setSelectedEntity(entity);
+    // dispach to
+    console.log('Selected Entity:', entity);
+    dispatch(selectEntityAsync(entity));
     handleClose();
   };
 
   const renderMenuItems = (type, items) => {
     return items.map((item) => (
-      <MenuItem key={item.entityId} onClick={() => handleSelection(item)}>
-        {item.displayname}
+      <MenuItem key={item.displayName} onClick={() => handleSelection(item)}>
+        {item.displayName}
       </MenuItem>
     ));
   };
@@ -94,7 +103,7 @@ const NestedDropdown = () => {
       >
         <Typography variant="body2" color="text.secondary">
           {/* {selectedEntity && `${selectedEntity?.type} - ${selectedEntity?.entityName}` || "Document Type"} */}
-          {(selectedEntity && `${selectedEntity?.type}`) || 'Document Type'}
+          {(selectedEntity && `${selectedEntity?.type  || "Type 2"}`) || 'Document Type'}
         </Typography>
       </Button>
       <Menu

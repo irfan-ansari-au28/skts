@@ -1,5 +1,5 @@
-import { Box, Grid, Paper, Typography, Alert, Container } from '@mui/material';
-import React, { useState } from 'react';
+import { Box, Grid, Paper, Typography, Alert, Container, CircularProgress } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import PaperLayout from '../PaperLayout/PaperLayout';
 import EntitySelect from '../EntitySelect/EntitySelect';
 import DynamicSearchForm from '../EntityDisplay/DynamicSearchForm';
@@ -7,7 +7,7 @@ import TypeSelect from '../TypeSelect/TypeSelect';
 import DynamicTable from '../DynamicTable/DynamicTable';
 import { useDispatch, useSelector } from 'react-redux';
 import NestedDropdown from '../menu/menu3';
-import { setDownloadNotification } from '../../features/entities/entitiesSlice';
+import { fetchEntities, setDownloadNotification } from '../../features/entities/entitiesSlice';
 
 const Search = () => {
   const [selectedType, setSelectedType] = useState('');
@@ -16,12 +16,18 @@ const Search = () => {
   const dispatch = useDispatch()
 
   const {downloadNotification} = useSelector(state=>state.entities)
+  const { entities, loading, error, selectedEntity } = useSelector(state => state.entities); 
+
+  useEffect(()=>{
+    dispatch(fetchEntities())
+  },[dispatch])
 
   const handleClose = () => {
     dispatch(setDownloadNotification(false))
     setAlertOpen(false); // Hide the Alert when the close button is clicked
   };
   // const { data, pageDetails, loading, error } = useSelector((state) => state.entity);
+  if (loading) return <CircularProgress />;
   return (
     <>
       {downloadNotification && (
@@ -45,23 +51,17 @@ const Search = () => {
             Document Search
           </Typography>
         </Box>
-        {/* <PaperLayout>
-          <NestedDropdown />
-        </PaperLayout> */}
+
         <Grid container spacing={3}>
           <Grid item xs={12} md={12} lg={12}>
-            <PaperLayout>
+           <PaperLayout>
               <Grid container spacing={3}>
                 <Grid item xs={12} md={4} lg={3}>
-                  {/* <TypeSelect onTypeChange={setSelectedType} /> */}
                   {/* // Option 1 Menu */}
-                  <NestedDropdown />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  {selectedType && <EntitySelect type={selectedType} />}
+                  {!loading && <NestedDropdown />}
                 </Grid>
               </Grid>
-              {<DynamicSearchForm onSubmit={setShowTable} />}
+              {selectedEntity && <DynamicSearchForm onSubmit={setShowTable} />}
             </PaperLayout>
           </Grid>
         </Grid>

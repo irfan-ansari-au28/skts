@@ -26,6 +26,7 @@ import PaperLayout from '../PaperLayout/PaperLayout';
 import CloseIcon from '@mui/icons-material/Close'; // For closing the Snackbar
 import { getPresignedUrl, processBulkDownload } from '../../api/apiService';
 import { setDownloadNotification } from '../../features/entities/entitiesSlice';
+import { formatFieldName } from '../../utils/helper';
 
 // remove this sample data
 
@@ -168,6 +169,9 @@ function DynamicTable({ entityId }) {
   const [rowsPerPage, setRowsPerPage] = useState(50);
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('');
+// snackbar state
+  const [open, setOpen] = useState(false);
+
 
   // useEffect(() => {
   //   dispatch(fetchEntityData({ entityId, page, size: rowsPerPage, sortBy: orderBy, sortOrder: order }));
@@ -230,6 +234,9 @@ function DynamicTable({ entityId }) {
         alert('Failed to fetch download link.');
       }
     } else if (selected.length > 1) {
+      // open snackbar
+      console.log("Download started");
+      setOpen(true);
       // Bulk download case
       dispatch(setDownloadNotification(true))
       try {
@@ -247,6 +254,26 @@ function DynamicTable({ entityId }) {
       alert('No documents selected for download.');
     }
   };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
  
   if (loading) return <p>Loading...</p>;
@@ -267,6 +294,7 @@ function DynamicTable({ entityId }) {
   
 
   return (
+    <>
     <PaperLayout >
        <Box display="flex" justifyContent="space-between" alignItems="flex-start" width="100%" >
       <Typography variant="body1" component="p" sx={{ flexGrow: 1 }}>
@@ -301,14 +329,26 @@ function DynamicTable({ entityId }) {
                 key={key}
                 align="left"
                 sortDirection={orderBy === key ? order : false}
-                sx={{ fontWeight: 'bold', fontSize: '1rem', textTransform:'lowercase' }}
+                sx={{
+                  textTransform: 'none',  // This overrides the CSS to ensure text is not transformed
+                  '&.MuiTableCell-root': { // This ensures your style has higher specificity
+                    textTransform: 'none'  // Repeat to enforce the override
+                  },
+                  fontSize: '15px',
+                  fontWeight:'700',
+                  whiteSpace: 'nowrap',       // Prevents text from wrapping
+                  overflow: 'hidden',         // Keeps the text in a single line, hidden overflow
+                  textOverflow: 'ellipsis',   // Adds ellipsis if the text overflows
+                  maxWidth: 160,              // You might need to adjust this based on your layout
+                }}
               >
                 <TableSortLabel
                   active={orderBy === key}
                   direction={orderBy === key ? order : 'asc'}
                   onClick={(event) => handleRequestSort(event, key)}
+                
                 >
-                  {key.toUpperCase()}
+                  {formatFieldName(key)}
                 </TableSortLabel>
               </TableCell>
             ))}
@@ -361,6 +401,20 @@ function DynamicTable({ entityId }) {
         }}
       />
     </PaperLayout>
+    <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+      >
+        <Alert onClose={handleClose} variant="filled" severity="success" sx={{ width: '100%' }}>
+          Download initiated! Check download page for status
+        </Alert>
+      </Snackbar>
+    </>
   );
 }
 

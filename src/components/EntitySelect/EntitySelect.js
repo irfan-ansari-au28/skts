@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { FormControl, InputLabel, Select, MenuItem, CircularProgress } from '@mui/material';
-import {  setSelectedEntityId } from '../../features/entities/entitiesSlice';
+import {  setSelectedEntity } from '../../features/entities/entitiesSlice';
 
 const EntitySelect = () => {
     const dispatch = useDispatch();
@@ -9,7 +9,7 @@ const EntitySelect = () => {
 
 
     const handleChange = (event) => {
-        dispatch(setSelectedEntityId(event.target.value));
+        dispatch(setSelectedEntity(event.target.value));
     };
 
     if (loading) {

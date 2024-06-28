@@ -4,13 +4,23 @@ import API from '../../api/axios';
 // Async thunk for fetching entities
 export const fetchEntities = createAsyncThunk(
   'entities/fetchEntities',
-  async (type, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const response = await API.get(`/api/v1/entity/all?type=${type}`);
+      const response = await API.get(`/api/v1/entity/all`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
+  }
+);
+
+// Async thunk for selecting an entity (if you need async operations)
+export const selectEntityAsync = createAsyncThunk(
+  'entities/selectEntityAsync',
+  async (entity, { dispatch }) => {
+    // Perform any async operations here if needed
+    dispatch(setSelectedEntity(entity));
+    return entity;
   }
 );
 
@@ -19,14 +29,14 @@ const entitiesSlice = createSlice({
   initialState: {
     entities: [],
     searchFields: {}, 
-    selectedEntityId: '',
+    selectedEntity: null,
     downloadNotification: false,
     loading: false,
     error: null,
   },
   reducers: {
-    setSelectedEntityId: (state, action) => {
-        state.selectedEntityId = action.payload;
+    setSelectedEntity: (state, action) => {
+        state.selectedEntity = action.payload;
     },
     setSearchFields: (state, action) => {  
       state.searchFields = action.payload;
@@ -51,7 +61,7 @@ const entitiesSlice = createSlice({
   }
 });
 
-export const { setSelectedEntityId, setSearchFields, setDownloadNotification } = entitiesSlice.actions;
+export const { setSelectedEntity, setSearchFields, setDownloadNotification } = entitiesSlice.actions;
 
 
 export default entitiesSlice.reducer;
