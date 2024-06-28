@@ -5,7 +5,7 @@ import {
   TextField,
   Button,
   Box,
-  CircularProgress,
+  // CircularProgress,
   Typography,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
@@ -15,15 +15,13 @@ import { debounce } from '../../utils/debounce';
 
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { deserializeDate, serializeDate } from '../../utils/helper';
-
-
+import { deserializeDate, formatFieldName, serializeDate } from '../../utils/helper';
 
 const DynamicSearchForm = ({ onSubmit }) => {
   const dispatch = useDispatch();
-  const { entities, selectedEntityId, loading, error } = useSelector(
-    (state) => state.entities
-  );
+  const red= useSelector((state) => state.entities);
+  console.log(red)
+  const searchFields = useSelector((state) => state.entities.selectedEntity.searchFields);
   const [formData, setFormData] = React.useState({});
   const [formErrors, setFormErrors] = React.useState({});
 
@@ -74,41 +72,41 @@ const DynamicSearchForm = ({ onSubmit }) => {
   };
 
   // TODO : remove
-  const searchFields = [
-    {
-      minValue: 0,
-      fieldName: 'IS Create Date From',
-      displayName: 'IS Create Date From',
-      maxValue: 0,
-      defaultValue: '2022-04-17',
-      dataType: 'date',
-      isMandatory: true,
-      fieldId: 1,
-      status: 'ACTIVE',
-    },
-    {
-      minValue: 0,
-      fieldName: 'IS Create Date To',
-      displayName: 'IS Create Date To ',
-      maxValue: 0,
-      defaultValue: '2024-06-04T18:30:00.000Z',
-      dataType: 'date',
-      isMandatory: true,
-      fieldId: 2,
-      status: 'ACTIVE',
-    },
-    {
-      minValue: 0,
-      fieldName: 'Scan Batch ID',
-      displayName: 'Scan Batch ID',
-      maxValue: 0,
-      defaultValue: 'Boy',
-      dataType: 'text',
-      isMandatory: true,
-      fieldId: 3,
-      status: 'ACTIVE',
-    },
-  ];
+  // const searchFields = [
+  //   {
+  //     minValue: 0,
+  //     fieldName: 'IS Create Date From',
+  //     displayName: 'IS Create Date From',
+  //     maxValue: 0,
+  //     defaultValue: '2022-04-17',
+  //     dataType: 'date',
+  //     isMandatory: true,
+  //     fieldId: 1,
+  //     status: 'ACTIVE',
+  //   },
+  //   {
+  //     minValue: 0,
+  //     fieldName: 'IS Create Date To',
+  //     displayName: 'IS Create Date To ',
+  //     maxValue: 0,
+  //     defaultValue: '2024-06-04T18:30:00.000Z',
+  //     dataType: 'date',
+  //     isMandatory: true,
+  //     fieldId: 2,
+  //     status: 'ACTIVE',
+  //   },
+  //   {
+  //     minValue: 0,
+  //     fieldName: 'Scan Batch ID',
+  //     displayName: 'Scan Batch ID',
+  //     maxValue: 0,
+  //     defaultValue: 'Boy',
+  //     dataType: 'text',
+  //     isMandatory: true,
+  //     fieldId: 3,
+  //     status: 'ACTIVE',
+  //   },
+  // ];
 
   const handleChange = (fieldId, value) => {
     const field = searchFields.find((field) => field.fieldId === fieldId);
@@ -135,21 +133,21 @@ const DynamicSearchForm = ({ onSubmit }) => {
     });
   };
 
-
   const handleSubmit = () => {
     console.log('Submitting form data:', formData);
     // Dispatch action to store formData in Redux
     const errors = validate(formData);
     if (Object.keys(errors).length === 0) {
       onSubmit(true);
-      dispatch(fetchEntityData({ entityId: selectedEntityId, body: formData }));
+      // TODO: Remove hardcode entityID
+      dispatch(fetchEntityData({ entityId: 1, body: formData }));
     } else {
       setFormErrors(errors);
     }
   };
 
-  if (loading) return <CircularProgress />;
-  if (error) return <Typography color="error">{error}</Typography>;
+  // if (loading) return <CircularProgress />;
+  // if (error) return <Typography color="error">{error}</Typography>;
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -168,7 +166,7 @@ const DynamicSearchForm = ({ onSubmit }) => {
           </div>
         )}
       </Box> */}
-      <Box >
+      <Box>
         <Grid container spacing={2} alignItems="center">
           {searchFields.map((field) => (
             <Grid
@@ -185,7 +183,7 @@ const DynamicSearchForm = ({ onSubmit }) => {
               }}
             >
               <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
-                {field.displayName}
+                {formatFieldName(field.displayName)}
                 {field.isMandatory && <span style={{ color: 'red' }}>*</span>}
               </Typography>
               {field.dataType === 'date' ? (
@@ -212,7 +210,7 @@ const DynamicSearchForm = ({ onSubmit }) => {
                   helperText={formErrors[field.fieldId] || ' '}
                   // Generic placeholder for all fields
                   InputProps={{
-                    placeholder: `${field.displayName}`,
+                    placeholder: `${formatFieldName(field.displayName)}`,
                     style: { color: '#555770' },
                   }}
                 />
