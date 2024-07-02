@@ -29,6 +29,7 @@ const DropdownMenu = () => {
   const [selectedEntity, setSelectedEntity] = useState(null);
 
   const { entities} = useSelector(state => state.entities); 
+  const displayName = useSelector(state => state?.entities?.selectedEntity?.displayName); 
   const dispatch = useDispatch();
   
   useEffect(() => {
@@ -63,7 +64,7 @@ const DropdownMenu = () => {
   const handleSelection = (entity) => {
     console.log('Selected Entity:', entity);
     setSelectedEntity(entity);
-    // dispach to
+    // dispach to redux
     console.log('Selected Entity:', entity);
     dispatch(selectEntityAsync(entity));
     handleClose();
@@ -94,6 +95,8 @@ const DropdownMenu = () => {
           // width: '100%',
           // maxWidth: "240px",
           minWidth: '120px',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
           textTransform: 'none',
           borderColor: 'rgba(0, 0, 0, 0.23)',
           '&:hover': {
@@ -105,7 +108,8 @@ const DropdownMenu = () => {
       >
         <Typography variant="body2" color="text.secondary">
           {/* {selectedEntity && `${selectedEntity?.type} - ${selectedEntity?.entityName}` || "Document Type"} */}
-          {(selectedEntity && `${selectedEntity?.type  || "Type 2"}`) || 'Document Type'}
+          {/* {(selectedEntity && `${selectedEntity?.displayName || selectedEntity?.type  || "Type 2"}`) || 'Document Type'} */}
+          {(displayName && `${displayName || selectedEntity?.type  || "Type 2"}`) || 'Document Type'}
         </Typography>
       </Button>
       <Menu

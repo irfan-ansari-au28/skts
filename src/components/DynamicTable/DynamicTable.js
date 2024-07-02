@@ -28,7 +28,8 @@ import { formatFieldName } from '../../utils/helper';
 
 function DynamicTable({ entity }) {
   const dispatch = useDispatch();
-  const { data, pageDetails, loading, error } = useSelector((state) => state.entity);
+  const { pageDetails, loading, error } = useSelector((state) => state.entity);
+  const data = useSelector((state) => state?.entity?.data?.[0]?.searchFields);
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(50);
@@ -46,6 +47,7 @@ function DynamicTable({ entity }) {
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
     console.log(`Sorting ${property} by ${isAsc ? 'desc' : 'asc'} order`);
+    // TODO : replace by enitityName
     dispatch(
       fetchEntityData({
         entityId: 1,
@@ -253,7 +255,7 @@ function DynamicTable({ entity }) {
                   </TableCell>
                   {Object.entries(row).map(([key, value]) => (
                     <TableCell
-                      sx={{ fontWeight: '500', color: '#190134' }}
+                      sx={{ fontWeight: '500', color: '#190134',  }}
                       key={`${key}-${index}`}
                       align="left"
                     >

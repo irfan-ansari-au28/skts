@@ -3,11 +3,12 @@ import API from '../../api/axios';
 
 export const fetchEntityData = createAsyncThunk(
   'entity/fetchData',
-  async ({ entityId, page=0, size=50, sortBy, sortOrder, body }, { rejectWithValue }) => {
+  async ({ entityName, page=0, size=50, sortBy, sortOrder, body }, { rejectWithValue }) => {
     try {
-      const response = await API.post(`/api/v1/entity/${entityId}/search`, body, {
+      const response = await API.post(`/api/v1/entity/${entityName}/search`, body, {
         params: { page, size, sortBy, sortOrder }
       });
+      console.log('entity', response.data)
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
